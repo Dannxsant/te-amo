@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Para ti 💌</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #ffd1dc, #ffe5ec);
+    }
+
+    .container {
+      text-align: center;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      flex-direction: column;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .envelope {
+      width: 200px;
+      height: 130px;
+      background: #ff8fa3;
+      position: relative;
+      margin: 20px auto;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.4s;
+    }
+
+    .envelope:hover { transform: scale(1.05); }
+
+    .envelope::before,
+    .envelope::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-style: solid;
+    }
+
+    .envelope::before {
+      border-width: 65px 100px 0 100px;
+      border-color: #ffb3c6 transparent transparent transparent;
+      top: 0;
+      left: 0;
+    }
+
+    .envelope::after {
+      border-width: 0 100px 65px 100px;
+      border-color: transparent transparent #ffb3c6 transparent;
+      bottom: 0;
+      left: 0;
+    }
+
+    
+    .letter, .vinyl-section {
+      display: none;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 400px;
+      margin: 20px auto;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      animation: fadeIn 0.8s ease-in-out;
+      overflow-y: auto;
+      max-height: 80vh;
+    }
+
+    .letter p { font-size: 18px; line-height: 1.6; color: #444; white-space: pre-line; }
+
+    .btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #ff4d6d;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s;
+    }
+
+    .btn:hover { background: #c9184a; }
+
+    
+    .vinyl {
+      width: 150px;
+      height: 150px;
+      background: radial-gradient(circle, #333 60%, #000 100%);
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      position: relative;
+      animation: spin 5s linear infinite;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+
+    .vinyl::before {
+      content: '';
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      background: #ff4d6d;
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+    .song-list { text-align: left; margin-top: 10px; }
+    .song-list a {
+      display: block;
+      margin: 8px 0;
+      color: #ff4d6d;
+      text-decoration: none;
+      font-size: 16px;
+      transition: color 0.3s;
+    }
+    .song-list a:hover { color: #c9184a; text-decoration: underline; }
+
+    @keyframes fadeIn { from {opacity:0; transform: translateY(20px);} to {opacity:1; transform:translateY(0);} }
+
+    
+    .heart {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      background-color: #ff4d6d;
+      transform: rotate(-45deg);
+      left: 50%;
+      top: 50%;
+      animation: floatUp 4s linear infinite;
+      opacity: 0.8;
+      z-index: 1000;
+    }
+
+    .heart::before, .heart::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: #ff4d6d;
+      border-radius: 50%;
+    }
+
+    .heart::before { top:-10px; left:0; } 
+    .heart::after { left:10px; top:0; }
+
+    @keyframes floatUp {
+      0% { transform: translateX(0) translateY(0) rotate(-45deg); opacity:0.8; }
+      100% { transform: translateX(-50px) translateY(-600px) rotate(-45deg); opacity:0; }
+    }
+
+    
+    .modal {
+      display:none;
+      position:fixed;
+      top:0; left:0;
+      width:100%; height:100%;
+      background: rgba(0,0,0,0.6);
+      justify-content:center;
+      align-items:center;
+      z-index: 2000;
+    }
+
+    .modal-content {
+      background:white;
+      padding:20px;
+      border-radius:12px;
+      text-align:center;
+      max-width:90%;
+      max-height:90%;
+      overflow:auto;
+      position:relative;
+    }
+
+    .modal-content img {
+      max-width:100%;
+      border-radius:8px;
+      margin-bottom:10px;
+    }
+
+    .close-btn {
+      position:absolute;
+      top:10px; right:10px;
+      background:#ff4d6d;
+      color:white;
+      border:none;
+      border-radius:50%;
+      width:30px; height:30px;
+      cursor:pointer;
+      font-size:16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    
+    <div class="envelope" id="envelope"></div>
+
+    <!-- CARTA -->
+    <div class="letter" id="letter">
+      <h2>¡FELIZ DIA DEL NOVIO AMOR!💗</h2>
+      <p>
+Hoy, más que nunca, quiero recordarte cuánto significas para mí. Gracias por llegar a mi vida y por quedarte en ella de la forma más bonita. Gracias por cada gesto, cada detalle, cada palabra y cada pedacito de amor que me das sin medida.
+
+Gracias por ser ese lugar seguro al que siempre puedo regresar, por sostenerme cuando las cosas no van bien y por celebrar conmigo cada pequeña alegría. Gracias por tu paciencia , por entenderme incluso cuando ni yo misma lo hago, por tus abrazos que lo curan todo y por tu forma tan única de quererme.
+
+A veces pienso en lo mucho que ha cambiado mi vida desde que estás en ella. Todo tiene más sentido,cada día contigo es diferente, especial y lleno de cosas que me hacen sonreír. Y no hay un solo momento en el que no me sienta afortunada por tenerte a mi lado.
+
+Te juro que no pasa un día sin que piense en cómo puedo demostrarte lo mucho que te amo. Siempre estoy imaginando maneras de hacerte sentir lo valioso que eres para mí, porque mi mayor deseo es que nunca dudes del amor tan grande que siento por ti.
+
+Me gustas cada día más. Me encanta caminar tomada de tu mano, sentir tus abrazos que se sienten tan calidos y besarte sabiendo que en cada beso hay promesas que no necesitan palabras. Eres mi persona favorita, mi mejor coincidencia, mi motivo para seguir adelante a pesar de las circunstancias, me haces sentir mas fuerte
+
+Y aunque a veces no encuentre las palabras exactas para describirlo, cada vez que te miro siento una emoción tan intensa que parece que quiere salirse de mi pecho. Me haces sentir la mujer más feliz, y con un solo gesto, con una simple mirada o una caricia, haces que mi mundo se detenga y todo cobre sentido.
+
+Nunca imaginé que amar pudiera sentirse así tan fuerte, tan bonito, tan real. Nunca había sentido tanto amor, tanta ternura y tantas ganas de compartir mi vida con alguien. Y ahora que lo hago, solo puedo desear que esto que tenemos siga creciendo, que sigamos construyendo sueños juntos y que nuestra historia no tenga final.
+
+Gracias por ser tú. Por aparecer, por quedarte, por amarme y dejarme amarte. Por enseñarme que el amor no es perfecto, pero sí puede ser sincero, profundo y hermoso.
+
+Te amo con todo lo que soy, con cada pensamiento, con cada latido.💗
+      </p>
+      <button class="btn" onclick="showVinyl()">Siguiente 🎶</button>
+    </div>
+
+    
+    <div class="vinyl-section" id="vinylSection">
+      <h2>💓</h2>
+      <div class="vinyl"></div>
+      <div class="song-list">
+        <a href="https://music.apple.com/mx/song/regalo-de-dios/1713857935" target="_blank">💿 Canción 1 – Regalo de dios</a>
+        <a href="https://music.apple.com/mx/song/lo-tienes-todo/1713857956" target="_blank">💿 Canción 2 – Lo tienes todo</a>
+        <a href="https://music.apple.com/mx/song/vicio/1506811182" target="_blank">💿 Canción 3 – Vicio</a>
+        <a href="https://music.apple.com/mx/song/como-queremos/1748507374" target="_blank">💿 Canción 4  – Como queremos</a>
+        <a href="https://music.apple.com/mx/song/t%C3%BA-y-yo-y-t%C3%BA/1833284952" target="_blank">💿 Canción 5 – Tu y yo y tu</a>
+        <a href="https://music.apple.com/mx/song/aurora/1748507551" target="_blank">💿 Canción 6 – Aurora</a>
+        <a href="https://music.apple.com/mx/song/d%C3%ADa-tras-d%C3%ADa/1748507553" target="_blank">💿 Canción 7 – Dia tras dia</a>
+        <a href="https://music.apple.com/mx/song/me-gustas/1495513426" target="_blank">💿 Canción 8 – Me gustas</a>
+        <a href="https://music.apple.com/mx/song/hasta-que-amanezca/1495429335" target="_blank">💿 Canción 9 – Hasta que amanezca </a>
+        <a href="https://music.apple.com/mx/song/brillas/1632150856" target="_blank">💿 Canción 10 – Brillas</a>
+        <a href="https://music.apple.com/mx/song/hasta-la-muerte/1622075167" target="_blank">💿 Canción 11 – Hasta la muerte</a>
+        <a href="https://music.apple.com/mx/song/mi-tesoro/793993285" target="_blank">💿 Canción 12 – Mi tesoro</a>
+        <a href="https://music.apple.com/mx/song/here-there-and-everywhere/1441164817" target="_blank">💿 Canción 13 – Here,there and everywhere</a>
+        <a href="https://music.apple.com/mx/song/eres-t%C3%BA/1604646399" target="_blank">💿 Canción 14 – Eres tu</a>
+        <a href="https://music.apple.com/mx/song/propuesta-proposta/486399477" target="_blank">💿 Canción 15 – Propuesta</a>
+        <a href="https://music.apple.com/mx/song/voy-a-apagar-la-luz-contigo-aprend%C3%AD/42229501" target="_blank">💿 Canción 16 – Voy a apagar la luz</a>
+        <a href="https://music.apple.com/mx/song/contigo/1010695029" target="_blank">💿 Canción 17 – Contigo</a>
+        <a href="https://music.apple.com/mx/song/amor-mio-main/1707931821" target="_blank">💿 Canción 18 – Amor mio</a>
+        <a href="https://music.apple.com/mx/song/nuestro-sue%C3%B1o/321443778" target="_blank">💿 Canción 19 – Nuestro sueño</a>
+        <a href="https://music.apple.com/mx/song/runnin-home-to-you/1455535346" target="_blank">💿 Canción 20 – Runnin' Home to You</a>
+    </div>
+      <button class="btn" id="showFinalBtn">Siguiente 💌</button>
+    </div>
+  </div>
+
+ 
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <button class="close-btn" id="closeModal">❌</button>
+      <img src="collage.jpeg" modalImage" alt="Final">
+      <p id="finalText">Gracias por ser mi lugar favorito en el mundo</p>
+    </div>
+  </div>
+
+  <audio id="backgroundAudio" loop>
+    <source src="cancion.mp3" type="audio/mp3">
+    Tu navegador no soporta audio.
+  </audio>
+
+  <script>
+    const envelope = document.getElementById('envelope');
+    const letter = document.getElementById('letter');
+    const vinylSection = document.getElementById('vinylSection');
+    const backgroundAudio = document.getElementById('backgroundAudio');
+
+    const showFinalBtn = document.getElementById('showFinalBtn');
+    const modal = document.getElementById('modal');
+    const modalImage = document.getElementById('modalImage');
+    const finalText = document.getElementById('finalText');
+    const closeModal = document.getElementById('closeModal');
+
+    envelope.addEventListener('click', () => {
+      envelope.style.display = 'none';
+      letter.style.display = 'block';
+      backgroundAudio.play().catch(err => console.log(err));
+    });
+
+    function showVinyl() {
+      letter.style.display = 'none';
+      vinylSection.style.display = 'block';
+    }
+
+
+    showFinalBtn.addEventListener('click', () => {
+      modal.style.display = 'flex';
+    });
+
+    closeModal.addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
+
+
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.classList.add("heart");
+      heart.style.left = Math.random() * window.innerWidth + "px";
+      heart.style.animationDuration = 3 + Math.random() * 2 + "s";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 4000);
+    }
+    setInterval(createHeart, 300);
+
+
+    document.body.addEventListener('touchstart', () => {
+      backgroundAudio.play().catch(err => console.log(err));
+    }, { once: true });
+  </script>
+</body>
+</html>
